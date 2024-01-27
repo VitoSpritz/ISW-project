@@ -8,8 +8,4 @@ const port: number = 3000;
 app.use(history());
 app.use(express.static("public"));
 
-
-
-
-
 console.log("magar mur")
