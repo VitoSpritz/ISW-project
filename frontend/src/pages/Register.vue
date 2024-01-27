@@ -26,7 +26,7 @@ export default defineComponent({
 
 <template>
   <h2>Register</h2>
-  <form action="" method="POST" @click="showItems">
+  <form method="POST" @click="showItems">
     <ul>
       <li>
         <label for="username">Username</label>
