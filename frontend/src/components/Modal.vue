@@ -1,14 +1,27 @@
 <template>
-    <div class="backdrop">
+    <div class="backdrop" @click="closeModal">
         <div class="modal">
-            <p>modal content</p>
+            <p>Erorr</p>
         </div>
     </div>
 </template>
 
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+
+export default defineComponent({
+    methods:{
+        closeModal(){
+            this.$emit('close');
+        }
+    }
+})
+</script>
+
 <style>
     .modal{
-        widows: 400px;
+        width: 400px;
         padding: 20px;
         margin: 100px auto;
         background: white;
@@ -19,7 +32,7 @@
         top: 0;
         position: fixed;
         background-color: rgba(0, 0, 0, 0.5);
-        widows: 100%;
+        width: 100%;
         height: 100%;
     }
 </style>
