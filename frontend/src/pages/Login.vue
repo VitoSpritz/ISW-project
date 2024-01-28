@@ -1,28 +1,50 @@
 <script lang="ts">
-import { formToJSON } from 'axios';
+import axios, { formToJSON } from 'axios';
 import { defineComponent } from 'vue';
+import Modal from '../components/Modal.vue';
 
 export default defineComponent({
+  components: {
+    Modal
+  },
   data() {
     return{
       password:"",
       email:"",
-      isActive: false
+      isActive: false,
+      msgError: ""
     }
   },
   methods: {
-    showItems(){
-      if(this.email != "" && this.password != "" ){
-        this.isActive = true;
+    showModal(){
+      this.isActive = !this.isActive;
+    },
+    async onSubmit() {
+      try {
+        await axios.post("/api/auth/login", {
+          email: this.email,
+          password: this.password,
+        })
+        window.location.href = "/"
+      } catch (e: any) {
+        if (e.response) {
+            this.isActive = true;
+            this.msgError = e.response.status + " " + e.response.statusText + " - " + e.response.data;
+          } else {
+            this.msgError = e.message
+          }
       }
-    }
+    },
   }
 })
 </script>
 
 <template>
     <h2>Login</h2>
-    <form method="POST">
+    <div v-if="isActive">
+      <Modal @close="showModal" :message='msgError' ></Modal>
+    </div>
+    <form @submit.prevent="onSubmit">
         <ul>
             <li>
                 <label for="email">Email</label>

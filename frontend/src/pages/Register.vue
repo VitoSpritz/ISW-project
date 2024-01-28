@@ -9,32 +9,37 @@ export default defineComponent({
       username:"",
       password:"",
       email:"",
-      isActive: false
+      isActive: false,
+      msgError: ""
     }
   },
   components:{
     Modal
   },
   methods: {
-    showItems(){
-      if(this.username != "" && this.email != "" && this.password != "" ){
-        this.isActive = true;
-      }
-    },
     showModal(){
       this.isActive = !this.isActive;
     },
     async onSubmit() {
-      try {
-        await axios.post("/api/auth/register", {
-          username: this.username,
-          password: this.password,
-          email : this.email
-        })
-        window.location.href = "/"
-      } catch (e: any) {
-        if (e.response) {
-          this.isActive = true
+      if(this.username == "" || this.password == "" || this.email == ""){
+          this.isActive = true;
+          this.msgError = "Impossibile avere campi nulli";
+      }
+      else{
+        try {
+          await axios.post("/api/auth/register", {
+            username: this.username,
+            password: this.password,
+            email: this.email
+          })
+          window.location.href = "/"
+        } catch (e: any) {
+          if (e.response) {
+            this.isActive = true;
+            this.msgError = e.response.status + " " + e.response.statusText + " - " + e.response.data;
+          } else {
+            this.msgError = e.message
+          }
         }
       }
     },
@@ -44,10 +49,10 @@ export default defineComponent({
 
 <template>
   <div v-if="isActive">
-    <Modal @close="showModal"></Modal>
+    <Modal @close="showModal" :message='msgError' ></Modal>
   </div>
   <h2>Register</h2>
-  <form method="POST" @click="showItems">
+  <form method="POST" @submit.prevent="onSubmit">
     <ul>
       <li>
         <label for="username">Username</label>
@@ -62,12 +67,10 @@ export default defineComponent({
         <input type="password" id="password" name="password" v-model="password" />
       </li>
       <li>
-        <input type="button" name="submit" value="Invia" @click="onSubmit" />
+        <input type="submit" name="submit" value="Invia"/>
       </li>
     </ul>
-    
   </form>
-  <p>Antonio {{ username }}</p>
 </template>
 
 

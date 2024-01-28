@@ -1,24 +1,31 @@
-<template>
-    <div class="backdrop" @click.self="closeModal">
-        <div class="modal">
-            <p>{{ message }}</p>
-        </div>
-    </div>
-</template>
-
 <script lang="ts">
-import { defineComponent } from 'vue';
-
+import axios from 'axios';
+import { PropType, defineComponent } from 'vue';
+import { User } from '../types';
 
 export default defineComponent({
-    props: ['message'],
+    props: {
+        user: Object as PropType<User>,
+    },
     methods:{
         closeModal(){
             this.$emit('close');
-        }
+        },
+        async logout() {
+            await axios.post("/api/auth/logout")
+            window.location.reload()
+        },
     }
 })
 </script>
+
+<template>
+    <div class="backdrop" @click.self="closeModal">
+        <div class="modal">
+            <p @click.self="logout" >Logout</p>
+        </div>
+    </div>
+</template>
 
 <style scoped>
     .modal{
@@ -37,7 +44,10 @@ export default defineComponent({
         height: 100%;
     }
 
-    p{
+    .modal p{
+        width: fit-content;
+        cursor: pointer;
+        color: red;
         font-size: 15px;
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
