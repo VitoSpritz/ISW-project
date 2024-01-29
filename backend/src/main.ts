@@ -3,6 +3,7 @@ import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import history from "connect-history-api-fallback"
 import authRouter from "./routes/auth-routes"
+import roomsRoute from "./routes/rooms-route"
 import exp from "constants";
 
 const app: Express = express();
@@ -12,6 +13,7 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 app.use(authRouter);
+app.use(roomsRoute);
 
 app.use(history());
 app.use(express.static("public"));
