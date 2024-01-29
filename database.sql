@@ -10,7 +10,9 @@ CREATE TABLE users (
 
 CREATE TABLE rooms (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    roomName VARCHAR(40)
+    roomName VARCHAR(40),
+    roomCreator varchar(50),
+    FOREIGN key (roomCreator) REFERENCES users (email)
 );
 
 ALTER TABLE rooms AUTO_INCREMENT = 0;

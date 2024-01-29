@@ -66,15 +66,15 @@ export default defineComponent({
       <ul>
         <li>
           <label for="username">Username</label>
-          <input type="text" id="username" name="username" v-model="username" disabled="true" />
+          <input type="text" id="username" name="username" v-model="username" disabled="true" required/>
         </li>
         <li>
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" v-model="email" disabled="true" />
+          <input type="email" id="email" name="email" v-model="email" disabled="true" required/>
         </li>
         <li>
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" v-model="password" disabled="true" />
+          <input type="password" id="password" name="password" v-model="password" disabled="true" required/>
         </li>
         <li>
           <input type="submit" name="submit" value="Invia" disabled="true" />
@@ -88,15 +88,15 @@ export default defineComponent({
       <ul>
         <li>
           <label for="username">Username</label>
-          <input type="text" id="username" name="username" v-model="username" />
+          <input type="text" id="username" name="username" v-model="username" required/>
         </li>
         <li>
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" v-model="email"/>
+          <input type="email" id="email" name="email" v-model="email" required/>
         </li>
         <li>
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" v-model="password" />
+          <input type="password" id="password" name="password" v-model="password" required/>
         </li>
         <li>
           <input type="submit" name="submit" value="Invia"/>
