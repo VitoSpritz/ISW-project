@@ -30,11 +30,12 @@ export const createRoom = async (req: Request, res: Response) => {
 
 export const getRoomList = async (req: Request, res: Response) => {
   const user = decodeAccessToken(req, res)
-    if (!user) {
-      res.status(403).send("Questa operazione richiede l'autenticazione.")
-      return
-    }
+  if (!user) {
+    res.status(403).send("Questa operazione richiede l'autenticazione.")
+    return
+  }
 
   const conn = await getConnection()
-  conn.execute("SELECT id, roomName from rooms", [])
+  const [list] = await conn.execute("SELECT id, roomName from rooms")
+  res.json(list)
 }

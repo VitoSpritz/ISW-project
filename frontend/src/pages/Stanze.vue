@@ -1,6 +1,7 @@
 <script lang="ts">
 import axios, { formToJSON } from 'axios';
 import { defineComponent } from 'vue';
+import { room } from '../types';
 
 
 export default defineComponent({
@@ -11,7 +12,7 @@ export default defineComponent({
             isActive: false,
             toggle: false,
             msgError: "",
-            roomList: []
+            roomList: [] as room[]
         }
     },
     methods:{
@@ -20,6 +21,7 @@ export default defineComponent({
                 await axios.post("/api/room/createRoom", {
                 roomname: this.roomName
                 })
+                this.toggleDiv()
             } catch (e: any) {
                 if (e.response) {
                     console.error("Erore : ", e);
@@ -30,20 +32,19 @@ export default defineComponent({
                 }
             }
         },
-        savePath(e: any){
-            var files = e.target.files || e.dataTransfer.files;
-            if(!files)
-                return;
-            this.imgsrc = files[0];
-            console.log(this.imgsrc);
-        },
+        // savePath(e: any){
+        //     var files = e.target.files || e.dataTransfer.files;
+        //     if(!files)
+        //         return;
+        //     this.imgsrc = files[0];
+        //     console.log(this.imgsrc);
+        // },
         toggleDiv(){
             this.toggle = !this.toggle
         },
         async getAllRooms(){
-            const resp = await axios.get("/api/rooms/getAllRooms");
-            this.roomList = resp.data.rooms;
-            console.log(this.roomList);
+            const res = await axios.get("/api/room/getAllRooms");
+            this.roomList = res.data;
         }
     },
     mounted(){
@@ -61,7 +62,7 @@ export default defineComponent({
         <template v-if="toggle">
             <Transition name="slide-fade" appear>
                 <div>
-                    <form @submit.prevent="createRoom()">
+                    <form @submit.prevent="createRoom(); getAllRooms()">
                         <label for="room">Nome camera</label><br>
                         <input type="text" id="room" v-model="roomName" required><br>
                         <input type="submit" value="Crea">
@@ -70,9 +71,9 @@ export default defineComponent({
             </Transition>
         </template>
         <ul>
-            <!-- <li v-for="room in roomList" :key="room.id"></li>
-            <li>{{ room }} <button class="enterRoom">Entra</button></li> -->
-            <li>Attand <button class="enterRoom">Entra</button></li>
+            <li v-for="room in roomList" :key="room.id"> {{ room.id }} {{ room.roomName }} <button class="enterRoom">Entra</button></li>
+            <!-- <li>{{ room.id }} </li> -->
+            <!-- <li>Attand <button class="enterRoom">Entra</button></li> -->
         </ul>
     </div>
 </template>
