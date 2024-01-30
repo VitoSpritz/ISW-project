@@ -45,10 +45,11 @@ io.on('connection', (socket: Socket) => {
       io.to(roomName).emit('userJoined', socket.id);
     });
 
-    socket.on('sendMessage', (data: { roomName: string; message: string}) => {
+    socket.on('sendMessage', (data: { roomName: string; message: string, utente: string}) => {
       io.to(data.roomName).emit('messageReceived', {
           userId: socket.id,
           message: data.message,
+          utente: data.utente
       });
     });
 

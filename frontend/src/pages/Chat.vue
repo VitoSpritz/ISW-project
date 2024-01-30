@@ -21,7 +21,7 @@ export default defineComponent({
         },
 
         sendMessage(){
-            this.socket.emit('sendMessage', { roomName: this.$route.params.idChat, message: this.messageInput});
+            this.socket.emit('sendMessage', { roomName: this.$route.params.idChat, message: this.messageInput, utente: this.user?.username});
             this.messageInput = "";
         },
 
@@ -35,10 +35,13 @@ export default defineComponent({
             this.userList = users;
         })},
 
+        isCurrentuser(msg: messageBody){
+            return this.user?.username == msg.utente
+        },
+
         async getUser(){
             const res = await axios.get("/api/auth/profile")
             this.user = res.data
-            console.log("Andreotti : " + this.user?.username)
             this.joinRoom()
         }
     },
@@ -59,11 +62,14 @@ export default defineComponent({
     <div class="chat">
       <ul id="messages"></ul>
       <form class="chatForm" @submit.prevent="sendMessage">
-        <input id="m" type="text" autocomplete="off" placeholder="Scrivi un messaggio" v-model="messageInput"/>
-        <button>Send</button>
         <ul>
-            <li v-for="msg in allMessages" :key="msg.userId"> {{ user?.username }} : {{ msg.message }}</li>
+            <li v-for="msg in allMessages" :key="msg.userId" :class="isCurrentuser(msg) ? 'right' : 'left'"> {{ !isCurrentuser(msg) ? msg.utente + ': ' + msg.message : msg.message }} </li>
+                
         </ul>
+        <div class="chatBar">
+            <input id="m" type="text" autocomplete="off" placeholder="Scrivi un messaggio" v-model="messageInput"/>
+            <button>Send</button>
+        </div>
       </form>
     </div>
     <aside>
@@ -75,6 +81,8 @@ export default defineComponent({
 
 <style scoped>
 
+
+
     aside{
         background-color: peru;
         width: 10%;
@@ -84,10 +92,6 @@ export default defineComponent({
         margin-top: auto;
         width: 70%;
         align-items: end;
-    }
-
-    li{
-        font-size: 25px;
     }
 
     input{

@@ -10,5 +10,6 @@ export interface room{
 
 export interface messageBody{
     userId: string,
-    message: string
+    message: string,
+    utente: string
 }
