@@ -28,7 +28,6 @@ export default defineComponent({
     mounted(){
         this.getUser()
     }
-
 })
 </script>
 

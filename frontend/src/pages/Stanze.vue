@@ -2,11 +2,12 @@
 import axios, { formToJSON } from 'axios';
 import { defineComponent } from 'vue';
 import { room } from '../types';
-
+import io, { Socket } from "socket.io-client"
 
 export default defineComponent({
     data(){
         return{
+            socket: io("http://localhost:3000"),
             roomName: "",
             imgsrc: null as File | null,
             isActive: false,
@@ -21,6 +22,7 @@ export default defineComponent({
                 await axios.post("/api/room/createRoom", {
                 roomname: this.roomName
                 })
+                this.RegisterRoom()
                 this.toggleDiv()
             } catch (e: any) {
                 if (e.response) {
@@ -32,19 +34,18 @@ export default defineComponent({
                 }
             }
         },
-        // savePath(e: any){
-        //     var files = e.target.files || e.dataTransfer.files;
-        //     if(!files)
-        //         return;
-        //     this.imgsrc = files[0];
-        //     console.log(this.imgsrc);
-        // },
+        RegisterRoom(){
+            this.socket.emit('createRoom', this.roomName);
+        },
         toggleDiv(){
             this.toggle = !this.toggle
         },
         async getAllRooms(){
             const res = await axios.get("/api/room/getAllRooms");
             this.roomList = res.data;
+        },
+        changePage(e: string){
+            this.$router.push("/chat/:" + e);
         }
     },
     mounted(){
@@ -71,9 +72,7 @@ export default defineComponent({
             </Transition>
         </template>
         <ul>
-            <li v-for="room in roomList" :key="room.id"> {{ room.id }} {{ room.roomName }} <button class="enterRoom">Entra</button></li>
-            <!-- <li>{{ room.id }} </li> -->
-            <!-- <li>Attand <button class="enterRoom">Entra</button></li> -->
+            <li v-for="room in roomList" :key="room.id"> {{ room.id }} {{ room.roomName }} <button class="enterRoom" @click="changePage(room.id)">Entra</button></li>
         </ul>
     </div>
 </template>
