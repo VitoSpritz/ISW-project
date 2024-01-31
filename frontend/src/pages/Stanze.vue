@@ -1,19 +1,25 @@
 <script lang="ts">
 import axios, { formToJSON } from 'axios';
 import { defineComponent } from 'vue';
-import { room } from '../types';
+import { bannedUser, room, User } from '../types';
 import io, { Socket } from "socket.io-client"
+import Modal from '../components/Modal.vue';
 
 export default defineComponent({
+    components:{
+        Modal
+    },
     data(){
         return{
             socket: io("http://localhost:3000"),
+            user: null as User | null,
             roomName: "",
-            imgsrc: null as File | null,
+            // imgsrc: null as File | null,
             isActive: false,
             toggle: false,
             msgError: "",
-            roomList: [] as room[]
+            roomList: [] as room[],
+            banList: [] as bannedUser[]
         }
     },
     methods:{
@@ -34,25 +40,69 @@ export default defineComponent({
                 }
             }
         },
+
         RegisterRoom(){
             this.socket.emit('createRoom', this.roomName);
         },
+
         toggleDiv(){
             this.toggle = !this.toggle
         },
+
         async getAllRooms(){
             const res = await axios.get("/api/room/getAllRooms");
             this.roomList = res.data;
         },
+
+        async getBannedUsers(){
+            const res = await axios.get("/api/roles/banned");
+            this.banList = res.data;
+            console.log(this.banList)
+        },
+
+        async getUser(){
+            const res = await axios.get("/api/auth/profile")
+            this.user = res.data
+        },
+
+        checkBans(roomId: string){
+            for(const ban of this.banList){
+                if(ban.id.toString() == roomId && ban.email == this.user?.email){
+                    const today = new Date();
+                    console.log(ban.fine_sospensione > today.toISOString())
+                    if(ban.fine_sospensione > today.toISOString()){
+                        const time = this.formatDateTime(ban.fine_sospensione)
+                        this.msgError = "Sei stato bannato fino al: " + time;
+                        return true
+                    }else{
+                        this.deleteUser(ban.id, ban.email)
+                    }
+                }
+            }
+        },
+
+        async deleteUser(id: number, email: string){
+            await axios.post(`/api/roles/delete/${id}/${email}`)
+        },
+
         changePage(e: string){
             this.$router.push("/chat/:" + e);
-        }
+        },
+
+        showModal(){
+            this.isActive = !this.isActive;
+        },
+        
+        formatDateTime(dateTime: string): string {
+            return new Date(dateTime).toLocaleString();
+        },
     },
     mounted(){
         this.getAllRooms();
+        this.getBannedUsers();
+        this.getUser();
     }
 })
-
 </script>
 
 <template>
@@ -72,8 +122,11 @@ export default defineComponent({
             </Transition>
         </template>
         <ul>
-            <li v-for="room in roomList" :key="room.id"> {{ room.id }} {{ room.roomName }} <button class="enterRoom" @click="changePage(room.id)">Entra</button></li>
+            <li v-for="room in roomList" :key="room.id" :class="checkBans(room.id) ? 'ban' : ''"> {{ room.id }} {{ room.roomName }}<button class="enterRoom" @click=" !checkBans(room.id) ? changePage(room.id) : showModal()" >Entra</button></li>
         </ul>
+    </div>
+    <div v-if="isActive">
+        <Modal @close="showModal()" :message="msgError" ></Modal>
     </div>
 </template>
 

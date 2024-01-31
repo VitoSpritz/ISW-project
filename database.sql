@@ -35,4 +35,4 @@ CREATE TABLE moderators (
     FOREIGN KEY (id) REFERENCES rooms(id)
 );
 
-insert into bannedusers (email, fine_sospensione, id) value ('rocco@aww', '2024-01-28 15:00:00', 0) 
+-- insert into bannedusers (email, fine_sospensione, id) value ('rocco@aww', '2024-01-28 15:00:00', 0) 

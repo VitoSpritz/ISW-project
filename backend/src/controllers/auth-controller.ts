@@ -48,9 +48,24 @@ export const register = async (req: Request, res: Response) => {
 }
 
 export const getProfile = async (req: Request, res: Response) => {
-  // Decodifica il contenuto dell'access token, che contiene il dati dell'utente, e lo invia in risposta
+  // Decodifica il contenuto dell'access token, che contiene i dati dell'utente, e lo invia in risposta
   const user = decodeAccessToken(req, res)
   res.json(user)
+}
+
+export const getProfileParams = async (req: Request, res: Response) => {
+  
+  const user = decodeAccessToken(req, res)
+    if (!user) {
+        res.status(403).send("Questa operazione richiede l'autenticazione.")
+        return
+    }
+  
+  const conn = await getConnection()
+  const [list] = await conn.execute("SELECT email from users where username = ?", [
+      req.params.username,
+  ])
+  res.json(list)
 }
 
 export const logout = async (req: Request, res: Response) => {

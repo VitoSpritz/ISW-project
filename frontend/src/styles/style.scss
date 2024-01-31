@@ -89,6 +89,11 @@ nav {
     padding: 0;
     width: 40%;
 
+    .ban .enterRoom:hover{
+      // border: 5px red solid;
+      background-color: red;
+    }
+
     li{
       list-style: none;
       justify-content: space-between;
@@ -118,41 +123,64 @@ nav {
   }
 }
 
-.chatForm{
+aside{
+  // display: flex;
+  // background-color: peru;
+  width: 20%;
+  height: 60%;
+
+  ul{
+    background-color: peru;
+
+    .mod{
+      color: chartreuse;
+    }
+  }
+}
+
+.chat {
+  width: 100%;
+  display: flex;
+  overflow-y: auto;
+
+  .chatForm {
+    margin-top: auto;
+    width: 65%;
+    align-items: flex-end;
     display: flex;
     flex-direction: column;
     height: 400px;
 
-  .chatBar{
-    width: 100%;
-    align-items: flex-end;
-    display: flex;
-    justify-content: center;
-  }
+    .chatBar {
+      width: 100%;
+      align-items: flex-end;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
 
-  ul{
-    display: inline-block;
-    width: 100%;
-    margin: 0px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    // overflow: auto;
-
-    .left, .right{
-      margin: 0px;
-      text-align: left;
-      line-height: 30px;
+    ul {
       display: inline-block;
-      font-size: 20px;
-      width: 90%;
-    }
+      width: 100%;
+      margin: 0px;
+      overflow:auto;
 
-    .left{
-      text-align: left;
-    }
+      .left, .right {
+        margin: 0px;
+        text-align: left;
+        line-height: 30px;
+        display: inline-block;
+        font-size: 20px;
+        width: 90%;
+      }
 
-    .right{
-      text-align: right;
+      .left {
+        text-align: left;
+      }
+
+      .right {
+        text-align: right;
+      }
     }
   }
 }

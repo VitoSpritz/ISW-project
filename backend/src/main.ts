@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser"
 import history from "connect-history-api-fallback"
 import authRouter from "./routes/auth-routes"
 import roomsRoute from "./routes/rooms-route"
+import rolesRoute from "./routes/roles-routes"
 import http from 'http';
 import { Server, Socket } from "socket.io"
 import { decodeAccessToken } from "./utils/auth"
@@ -22,7 +23,10 @@ const io = new Server(server, {
 
 app.use(bodyParser.json());
 app.use(cookieParser());
+
 app.use(authRouter);
+app.use(rolesRoute);
+app.use(roomsRoute);
 
 const userList = new Map<string, Set<string>>();
 
@@ -53,6 +57,10 @@ io.on('connection', (socket: Socket) => {
       });
     });
 
+    // socket.on('rimuoviMessaggio', (removedMessage) => {
+    //   socket.broadcast.emit('messaggioRimosso', removedMessage);
+    // });
+
     socket.on('disconnect', () => {
       console.log('User disconnected');
       const rooms = io.sockets.adapter.rooms;
@@ -65,9 +73,6 @@ io.on('connection', (socket: Socket) => {
       }
     });
 });
-
-
-app.use(roomsRoute);
 
 app.use(history());
 app.use(express.static("public"));
