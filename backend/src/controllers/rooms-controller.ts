@@ -52,3 +52,23 @@ export const getRoomOwner = async (req: Request, res: Response) => {
   res.json(list)
 
 }
+
+export const deleteRoom = async (req: Request, res: Response) => {
+  const user = decodeAccessToken(req, res)
+  if (!user) {
+    res.status(403).send("Questa operazione richiede l'autenticazione.")
+    return
+  }
+
+  const conn = await getConnection()
+
+  await conn.execute("DELETE FROM moderators WHERE id = ?",[
+    req.params.id
+  ])
+
+  await conn.execute("DELETE FROM rooms WHERE id = ?", [
+    req.params.id
+  ])
+
+  res.json({ success: true })
+}

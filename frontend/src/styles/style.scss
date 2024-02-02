@@ -106,12 +106,27 @@ nav {
       .enterRoom{
         margin-top: auto;
         margin-bottom: auto;
-        margin-left: auto;
+        margin-left: 20px;
         align-items: baseline;
         background-color: white;
-        
         border: none;
         transition-duration: 0.4s;
+      }
+
+      .deleteRoom{
+        justify-content: flex-end;
+        margin-top: auto;
+        margin-bottom: auto;
+        align-items: baseline;
+        background-color: white;
+        border: none;
+        transition-duration: 0.4s;
+      }
+
+      .deleteRoom:hover{
+        border-radius: 5px;
+        background-color: red;
+        cursor: pointer;
       }
 
       .enterRoom:hover{
@@ -136,6 +151,16 @@ aside{
       color: chartreuse;
     }
   }
+}
+
+.bin{
+  width: 20px;
+  height: 20px;
+  color: rgba(0,0,0,1);
+}
+
+.hidden{
+  color: rgba(0,0,0,0.1);
 }
 
 .chat {

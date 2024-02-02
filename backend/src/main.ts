@@ -7,7 +7,7 @@ import roomsRoute from "./routes/rooms-route"
 import rolesRoute from "./routes/roles-routes"
 import http from 'http';
 import { Server, Socket } from "socket.io"
-import { decodeAccessToken } from "./utils/auth"
+import { messageBody } from "./utils/types"
 
 const app: Express = express();
 const port: number = 3000;
@@ -29,6 +29,9 @@ app.use(rolesRoute);
 app.use(roomsRoute);
 
 const userList = new Map<string, Set<string>>();
+const userMessages = new Map<string, messageBody[]>();
+
+let messageCounter = 0;
 
 io.on('connection', (socket: Socket) => {
 
@@ -50,16 +53,47 @@ io.on('connection', (socket: Socket) => {
     });
 
     socket.on('sendMessage', (data: { roomName: string; message: string, utente: string}) => {
-      io.to(data.roomName).emit('messageReceived', {
-          userId: socket.id,
-          message: data.message,
-          utente: data.utente
-      });
+      const { roomName, message, utente } = data;
+  
+      const newMessage: messageBody = {
+        userId: socket.id,
+        message,
+        utente,
+        showimg: false,
+        messageId: messageCounter
+      };
+  
+      if (!userMessages.has(roomName)) {
+        userMessages.set(roomName, []);
+      }
+      userMessages.get(roomName)?.push(newMessage);
+      messageCounter++;
+  
+      io.to(roomName).emit('messageReceived', newMessage);
     });
 
-    // socket.on('rimuoviMessaggio', (removedMessage) => {
-    //   socket.broadcast.emit('messaggioRimosso', removedMessage);
-    // });
+    socket.on('rimuoviMessaggio', (data: { messageId: number, roomName: string }) => {
+      
+      const { roomName, messageId } = data;
+  
+      if (userMessages.has(roomName)) {
+        userMessages.set(roomName, userMessages.get(roomName)?.filter(msg => msg.messageId !== messageId) || []);
+    }
+
+    io.to(roomName).emit('messaggiAggiornati', userMessages.get(roomName) || []);
+    });
+
+    socket.on('messaggioRimosso', (data) => {
+      console.log("Messaggio rimosso dal backend", data);
+      const { roomName, messageId } = data;
+    
+      const roomMessages = userMessages.get(roomName);
+      if (roomMessages) {
+        userMessages.set(roomName, roomMessages.filter(msg => msg.messageId !== messageId));
+      }
+    
+      io.to(roomName).emit('messaggiAggiornati', userMessages.get(roomName) || []);
+    });
 
     socket.on('disconnect', () => {
       console.log('User disconnected');
@@ -83,4 +117,3 @@ app.use((_, res) => {
 })
   
 server.listen(port, () => console.log(`Listening on http://localhost:${port}`))
-  

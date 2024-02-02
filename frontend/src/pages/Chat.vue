@@ -24,6 +24,7 @@ export default defineComponent({
             socket: io("http://localhost:3000"),
             isActive: false,
             mods: [] as Moderator[],
+            showBin: false
         }
     },
     methods:{
@@ -32,8 +33,12 @@ export default defineComponent({
         },
 
         sendMessage(){
-            this.socket.emit('sendMessage', { roomName: this.$route.params.idChat, message: this.messageInput, utente: this.user?.username});
-            this.messageInput = "";
+            console.log("messaggio da inviare " + this.messageInput)
+            if(this.messageInput != "" && this.messageInput != null && this.messageInput != " "){
+                this.socket.emit('sendMessage', { roomName: this.$route.params.idChat, message: this.messageInput, utente: this.user?.username});
+                this.messageInput = "";
+            }
+            
         },
 
         receiveMessage() {
@@ -111,16 +116,42 @@ export default defineComponent({
             this.getUserParams(this.text)
         },
 
+        rimuoviMessaggio(messageId: number, msg: messageBody) {
+            console.log("Rimuovi messaggio chiamato", messageId);
+            msg.showimg = false;
+            this.socket.emit('rimuoviMessaggio', { roomName: this.$route.params.idChat, messageId });
+        },
+
+        rightClick(event: any, msg: messageBody){
+            if(event.button == 2){
+                msg.showimg = true
+            }
+        },
+
     },
 
     mounted(){
         this.idChat = this.$route.params.idChat[2] == undefined || null ? this.$route.params.idChat[1] : this.$route.params.idChat[1] + this.$route.params.idChat[2],
         this.getMods(),
-        this.getUser(),
         this.receiveMessage(),
         this.getUserList(),
-        this.getOwner()
+        this.getOwner(),
+
+        this.socket.on('messaggioRimosso', (data) => {
+            this.allMessages = this.allMessages.filter(msg => msg.userId !== data.messageId);
+        })
+
+        this.socket.on('messaggiAggiornati', (updatedMessages) => {
+            this.allMessages = updatedMessages;
+        });
+
+        // if(this.user?.username == undefined){
+        //     this.$router.push('/');
+        // }
     },
+    created(){
+        this.getUser()
+    }
 })
 </script>
 
@@ -128,7 +159,7 @@ export default defineComponent({
     <h2>Chat numero {{ idChat }}</h2>
     <h2 v-if="isOwner()"> Sono il capo di art attack</h2>
     
-    <div class="chat" >
+    <div class="chat">
         <aside>
             <p>Utenti registrati</p>
             <ul>
@@ -139,7 +170,11 @@ export default defineComponent({
       <ul id="messages"></ul>
       <form class="chatForm" @submit.prevent="sendMessage">
         <ul>
-            <li v-for="(msg, index) in allMessages" :key="msg.userId" :class="isCurrentuser(msg) ? 'right' : 'left'"> {{ !isCurrentuser(msg) ? msg.utente + ': ' + msg.message : msg.message }} </li>
+            <li v-for="(msg) in allMessages" :key="msg.userId" :class="isCurrentuser(msg) ? 'right' : 'left'" @contextmenu.prevent="rightClick($event, msg)"> 
+                <img v-if="isCurrentuser(msg) && msg.showimg" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)" > 
+                {{ !isCurrentuser(msg) ? msg.utente + ': ' + msg.message : msg.message }}
+                <img v-if="!isCurrentuser(msg) && msg.showimg" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)">
+            </li>
                 
         </ul>
         <div class="chatBar">
@@ -149,7 +184,7 @@ export default defineComponent({
       </form>
     </div>
     <div v-if="isActive && isMod(idChat, user?.username) && text != user?.username && (!isOwnerParam(text) && isMod(idChat, user?.username))">
-        <ModsModal :isOwner = isOwner() :text="text" @close="activateModal()" ></ModsModal>
+        <ModsModal :isOwner = isOwner() :isMod="isMod(idChat, text)" :email="email" @close="activateModal()" :id="idChat"></ModsModal>
     </div>
     
 </template>

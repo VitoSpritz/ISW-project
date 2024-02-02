@@ -15,7 +15,9 @@ export interface roomOwner extends room{
 export interface messageBody{
     userId: string,
     message: string,
-    utente: string
+    utente: string,
+    showimg: boolean,
+    messageId: number
 }
 
 export interface bannedUser{

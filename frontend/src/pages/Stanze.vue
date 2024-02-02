@@ -1,7 +1,7 @@
 <script lang="ts">
 import axios, { formToJSON } from 'axios';
 import { defineComponent } from 'vue';
-import { bannedUser, room, User } from '../types';
+import { bannedUser, room, roomOwner, User } from '../types';
 import io, { Socket } from "socket.io-client"
 import Modal from '../components/Modal.vue';
 
@@ -19,6 +19,7 @@ export default defineComponent({
             toggle: false,
             msgError: "",
             roomList: [] as room[],
+            roomOwners: [] as roomOwner[],
             banList: [] as bannedUser[]
         }
     },
@@ -52,6 +53,11 @@ export default defineComponent({
         async getAllRooms(){
             const res = await axios.get("/api/room/getAllRooms");
             this.roomList = res.data;
+        },
+
+        async getOwner(){
+            const res = await axios.get("/api/room/roomOwners")
+            this.roomOwners = res.data
         },
 
         async getBannedUsers(){
@@ -96,11 +102,17 @@ export default defineComponent({
         formatDateTime(dateTime: string): string {
             return new Date(dateTime).toLocaleString();
         },
+
+        async deleteRoom(id: string){
+            await axios.post(`/api/rooms/deleteRoom/${id}`)
+            this.$router.push('/stanze');
+        }
     },
     mounted(){
         this.getAllRooms();
         this.getBannedUsers();
         this.getUser();
+        this.getOwner();
     }
 })
 </script>
@@ -112,7 +124,7 @@ export default defineComponent({
         <button class="createRoom" @click="toggleDiv()">Crea una stanza</button>
         <template v-if="toggle">
             <Transition name="slide-fade" appear>
-                <div>
+                <div v-if="user?.username != null || user?.username != undefined">
                     <form @submit.prevent="createRoom(); getAllRooms()">
                         <label for="room">Nome camera</label><br>
                         <input type="text" id="room" v-model="roomName" required><br>
@@ -122,7 +134,10 @@ export default defineComponent({
             </Transition>
         </template>
         <ul>
-            <li v-for="room in roomList" :key="room.id" :class="checkBans(room.id) ? 'ban' : ''"> {{ room.id }} {{ room.roomName }}<button class="enterRoom" @click=" !checkBans(room.id) ? changePage(room.id) : showModal()" >Entra</button></li>
+            <li v-for="room in roomOwners" :key="room.id" :class="checkBans(room.id) ? 'ban' : ''"> {{ room.id }} {{ room.roomName }}
+                <button v-if="user?.email == room.roomCreator" class="deleteRoom" @click="deleteRoom(room.id)">Elimina</button>
+                <button class="enterRoom" @click=" !checkBans(room.id) ? changePage(room.id) : showModal()" >Entra</button>
+            </li>
         </ul>
     </div>
     <div v-if="isActive">

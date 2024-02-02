@@ -21,14 +21,4 @@ const router: Router = createRouter({
     ]
 })
 
-// const socket = io();
-
-// socket.on("connect", () => {
-//   console.log(socket.id);
-// });
-
-// socket.on("disconnect", () => {
-//   console.log(socket.id);
-// });
-
 createApp(App).use(router).mount("#app");
