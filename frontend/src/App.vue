@@ -13,7 +13,8 @@ export default defineComponent({
     data(){
         return{
             user: null as User | null,
-            isActive: false
+            isActive: false,
+            logoAnimation: false
         }
     },
     methods:{
@@ -34,6 +35,7 @@ export default defineComponent({
 <template>
     <nav>
         <ul>
+            <li class="logoLi" :class="logoAnimation ? ' animazione-lettere' : ''" @click="logoAnimation = !logoAnimation"> Blink Chat</li>
             <li><router-link to="/">Home</router-link></li>
             <li><router-link to="/stanze">Stanze</router-link></li>
             <li v-if="user" @click="showUserInfo" class="userLi">Benvenuto {{ user.username }}</li>
@@ -45,12 +47,3 @@ export default defineComponent({
     <UserModal v-if="isActive" @close="showUserInfo"/>
     <RouterView></RouterView>
 </template>
-
-
-<style>
-    .userLi{
-        width: fit-content;
-        cursor: pointer;
-        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-    }
-</style>

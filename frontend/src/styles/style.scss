@@ -8,26 +8,60 @@ body, header, h1, h2, h5, ul {
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100%;
+}
+
+
+//Nav Bar
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animazione-lettere {
+  display: inline-block;
+  animation: fade 2.5s infinite;
 }
 
 nav {
   height: 40px;
   padding: 5px;
-  background-color: #D9D9D9;
+  background-color: #ededed;
   border-radius: 0px 0px 25px 25px;
 
-  ul {
+  ul{
     max-width: 100%;
     justify-content: flex-end;
     display: flex;
     list-style: none;
 
+    .userLi{
+      width: fit-content;
+      cursor: pointer;
+      font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    }
+    
+    .logoLi{
+      font-family: Rockwell;
+      font-size: 30px;
+      align-items: left;
+      margin-right: auto;
+      cursor: pointer;
+    }
+
     li {
-      
       font-size: 25px;
       text-align: center;
       width: 15%;
+      margin-right: 2%;
 
       a{
         display: inline-block;
@@ -39,7 +73,7 @@ nav {
       }
 
       .router-link-exact-active {
-        transition: 0.3 ease;
+        transition: .2s ease;
         color: rgb(219, 69, 83);
         border: 1px solid black;
         border-radius: 15px;
@@ -47,6 +81,18 @@ nav {
     }
   }
 }
+
+#app{
+  text-align: center;
+}
+
+p{
+  font-size: 20px;
+  font-family: $font2;
+}
+
+//Stanze
+
 
 .roomsDiv {
   display: flex;
@@ -57,7 +103,6 @@ nav {
   margin: 40px auto;
 
   div{
-    
 
     form{
       width: 100%;
@@ -138,9 +183,69 @@ nav {
   }
 }
 
+//Home
+
+.mainContainer{
+  display: flex;
+}
+
+.logoContainer{
+  display: flex;
+  width: 450px;
+  height: 300px;
+}
+
+.textContainer{
+  align-items: baseline;
+  display: flex;
+
+  & > p{
+    margin-left: auto;
+    margin-right: 50px;
+    text-align: justify;
+    font-size: 36px;
+    color: white;
+
+    span{
+      font-weight: bold; font-style: italic
+    }
+  }
+}
+
+body {
+  background: linear-gradient(to top, #1B4079, #396B8A, #1B4079);
+}
+
+.detailsDiv{
+
+  & > p{
+    text-align: center;
+    font-size: 25px;
+    color: white;
+  }
+
+  #gotoregister{
+    font-size: 25px;
+    color: white;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 15px 15px;
+    transition: .3s ease;
+  }
+
+  #gotoregister:hover{
+    background-color: white;
+    border: black 2px solid;
+    color: black;
+    cursor: pointer;
+  }
+}
+
+// Stanze 
+
 aside{
-  // display: flex;
-  // background-color: peru;
   width: 20%;
   height: 60%;
 
@@ -211,55 +316,107 @@ aside{
 }
 
 h2{
+  border-bottom: 2px #edf6f9 ridge; 
+  display: inline-block; 
+  padding-bottom: 8px; 
   text-align: center;
+  font-family: $header;
+  color: white;
+  text-align: center;
+  font-size: 35px;
   margin-top: 2%;
-  margin-bottom: 2%;
+  margin-bottom: 3%;
 }
 
+// Registrazione e login form
+
 form{
+  padding: 20px;
   width: 25%;
   height: 300px;
   border: 1px solid black;
   border-radius: 15px;
-  background-color: lightcyan;
+  background-color: #ededed;
   margin: auto;
   text-align: center;
   align-items: center;
   margin-bottom: 10%;
 
   ul{
+    padding: 2%;
+    width: 85%;
+    // margin-top: 15px;
     display: inline-block;
     list-style: none;
-    justify-content: center;
-    text-align: center;
     align-items: center;
-    align-items: center;
+    border-top: 2px ridge #00a6fb;
+    border-bottom: 2px ridge #00a6fb;
 
     li{
       font-size: 25px;
-      text-align: center;
-      width: 10%;
-      margin: 20px 8%;
-      text-align: center;
+      text-align: left;
+      width: 100%;
+      margin: 15px 0 0 15px;
       align-items: center;
 
-      input[type="password"], input[type="email"], input[type="text"]{
-        height: auto;
-        border-radius: 8px;
-        box-shadow: 2px;
-        font-size:medium;
+      label{
+        text-align: left;
+        font-family: $font2;
+        font-size: 25px;
+        margin-bottom: 5px;
       }
+
+      input{
+        width: 80%;
+        border: 1px ridge #2e2e2e;
+        height: auto;
+        border-radius: 4px;
+        box-shadow: 20px;
+        font-size: large;
+      }
+
+      input[type=submit]:hover{
+        cursor: pointer;
+        background-color: #d2d2d2;
+      }
+
+    }
+
+    li:last-child{
+      margin-top: 15px;
+      margin-bottom: 15px;
+      width: 30%;
+    }
+  }
+
+  & > p{
+
+    a{
+      font-weight: bold;
+      text-decoration: none;
+      color: rgb(13, 13, 255);
+      cursor: pointer
     }
   }
 }
+
+// Footer
 
 footer{
   background-color: white;
   text-align: center;
   border: 2px solid black;
   border-radius: 25%, 25%, 0, 0;
-  font-size: 50px;
-  font-family:'Courier New', Courier, monospace;
+  font-size: 25px;
+  font-family: $fontfooter;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  position: fixed;
+
+  span{
+    font-weight: bold;
+  }
 }
 
 @media screen and (min-width: 768px) {

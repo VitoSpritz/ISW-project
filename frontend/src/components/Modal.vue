@@ -1,7 +1,7 @@
 <template>
     <div class="backdrop" @click.self="closeModal">
         <div class="modal">
-            <p>{{ message }}</p>
+            <span>{{ message }}</span>
         </div>
     </div>
 </template>
