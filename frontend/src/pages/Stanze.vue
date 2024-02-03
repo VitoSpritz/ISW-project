@@ -87,7 +87,7 @@ export default defineComponent({
             }
         },
 
-        async deleteUser(id: number, email: string){
+        async deleteUser(id: string, email: string){
             await axios.post(`/api/roles/delete/${id}/${email}`)
         },
 
@@ -109,10 +109,13 @@ export default defineComponent({
         }
     },
     mounted(){
+        this.getUser();
         this.getAllRooms();
         this.getBannedUsers();
-        this.getUser();
         this.getOwner();
+    },
+    created(){
+        this.getUser();
     }
 })
 </script>
@@ -120,23 +123,28 @@ export default defineComponent({
 <template>
     <h2>Stanze</h2>
     <div class="roomsDiv">
-        <p>Iniza creaundo una nuova stanza, oppure unisci a una già esistente</p>
-        <button class="createRoom" @click="toggleDiv()">Crea una stanza</button>
+        <p v-if="user?.username != undefined">Iniza creando una nuova stanza, oppure unisciti a una già esistente</p>
+        <p v-else>Non hai effettuato l'acceso, fallo <router-link to="/register">qui</router-link> per poter iniziare a chattare! </p>
+        <button v-show="user?.username != undefined" class="createRoom" @click="toggleDiv()">
+            
+            Crea una stanza</button>
         <template v-if="toggle">
             <Transition name="slide-fade" appear>
-                <div v-if="user?.username != null || user?.username != undefined">
+                <div v-if="user?.username != undefined" class="createRoomDiv">
                     <form @submit.prevent="createRoom(); getAllRooms()">
                         <label for="room">Nome camera</label><br>
-                        <input type="text" id="room" v-model="roomName" required><br>
+                        <input type="text" id="room" v-model="roomName" required autocomplete="off"><br>
                         <input type="submit" value="Crea">
                     </form>
                 </div>
             </Transition>
         </template>
         <ul>
-            <li v-for="room in roomOwners" :key="room.id" :class="checkBans(room.id) ? 'ban' : ''"> {{ room.id }} {{ room.roomName }}
-                <button v-if="user?.email == room.roomCreator" class="deleteRoom" @click="deleteRoom(room.id)">Elimina</button>
+            <li v-for="room in roomOwners" :key="room.id" :class="checkBans(room.id) ? 'ban' : ''">
+                <span class="roomName">Stanza <span>{{ room.roomName }}</span></span>
                 <button class="enterRoom" @click=" !checkBans(room.id) ? changePage(room.id) : showModal()" >Entra</button>
+                <button v-if="user?.email == room.roomCreator" class="deleteRoom" @click="deleteRoom(room.id)">Elimina</button>
+                
             </li>
         </ul>
     </div>

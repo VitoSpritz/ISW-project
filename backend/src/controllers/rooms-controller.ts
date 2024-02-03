@@ -16,7 +16,7 @@ export const createRoom = async (req: Request, res: Response) => {
     req.body.roomname,
     user.email
   ])
-  const [name] = await conn.execute("SELECT id from rooms where roomName = ? and roomCreator = ?", [
+  const [name] = await conn.execute("SELECT id FROM rooms WHERE roomName = ? and roomCreator = ?", [
     req.body.roomname,
     user.email
   ])
@@ -36,7 +36,7 @@ export const getRoomList = async (req: Request, res: Response) => {
   }
 
   const conn = await getConnection()
-  const [list] = await conn.execute("SELECT id, roomName from rooms")
+  const [list] = await conn.execute("SELECT id, roomName FROM rooms")
   res.json(list)
 }
 
@@ -48,7 +48,7 @@ export const getRoomOwner = async (req: Request, res: Response) => {
   }
 
   const conn = await getConnection()
-  const [list] = await conn.execute("SELECT id, roomName, roomCreator from rooms")
+  const [list] = await conn.execute("SELECT id, roomName, roomCreator FROM rooms")
   res.json(list)
 
 }

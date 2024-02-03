@@ -12,7 +12,7 @@ export const bannedList = async (req: Request, res: Response) => {
 
     const conn = await getConnection()
 
-    const [list] = await conn.execute("SELECT * from bannedusers")
+    const [list] = await conn.execute("SELECT * FROM bannedusers")
     res.json(list)
 }
 
@@ -25,7 +25,7 @@ export const deleteBan = async (req: Request, res: Response) => {
     }
 
     const conn = await getConnection()
-    await conn.execute("DELETE FROM bannedusers where id = ? and email = ?", [
+    await conn.execute("DELETE FROM bannedusers WHERE id = ? and email = ?", [
         req.params.id,
         req.params.email
     ])
@@ -93,7 +93,7 @@ export const deleteMod = async (req: Request, res: Response) =>{
 
     const conn = await getConnection()
 
-    await conn.execute("DELETE FROM moderators where id = ? AND email = ?", [
+    await conn.execute("DELETE FROM moderators WHERE id = ? AND email = ?", [
         req.params.id,
         req.params.email,
     ])

@@ -22,7 +22,7 @@ export interface messageBody{
 
 export interface bannedUser{
     email: string,
-    id: number,
+    id: string,
     inizio_sospensione: string,
     fine_sospensione: string
 }

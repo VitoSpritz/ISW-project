@@ -5,12 +5,25 @@ body, header, h1, h2, h5, ul {
   padding: 0;
 }
 
+html{
+  height: 100%;
+}
+
 body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  background: linear-gradient(to top, #1B4079, #396B8A, #1B4079);
 }
 
+form{
+  padding: 20px;
+  width: 25%;
+  border: 1px solid black;
+  border-radius: 15px;
+  background-color: #ededed;
+  margin: auto;
+}
 
 //Nav Bar
 
@@ -102,14 +115,50 @@ p{
   width: 60%;
   margin: 40px auto;
 
+  & > p{
+    color: white;
+    font-size: 25px;
+
+    & > a{
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+      text-decoration:underline ;
+      cursor: pointer
+    }
+  }
+
   div{
 
-    form{
+    & > form{
+      align-items: center;
+      border-radius: 15px;
+      background-color: #ededed;
       width: 100%;
       padding: 5px;
       height: auto;
       text-align: left;
-      background-color: transparent;
+
+      label{
+        text-align: left;
+        font-family: $font2;
+        font-size: 18px;
+        margin-bottom: 5px;
+      }
+
+      input{
+        width: 80%;
+        border: 1px ridge #2e2e2e;
+        height: auto;
+        border-radius: 4px;
+        box-shadow: 20px;
+        font-size: large;
+      }
+
+      input[type=submit]:hover{
+        cursor: pointer;
+        background-color: #d2d2d2;
+      }
     }
   }
 
@@ -124,61 +173,91 @@ p{
     margin-bottom: 20px;
   }
 
+  .createRoom{
+    border-radius: 15px;
+    border: 2px ridge lightgray;
+    font-size: 20px;
+    align-items: baseline;
+    justify-content: baseline;
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+
   .createRoom:hover{
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     cursor: pointer;
+    background-color: #dedede;
   }
 
-  ul{
+  & > ul{
     list-style: none;
-    padding: 0;
-    width: 40%;
+    padding: 10px;
+    width: 60%;
 
     .ban .enterRoom:hover{
-      // border: 5px red solid;
       background-color: red;
     }
 
     li{
+      padding: 5px;
       list-style: none;
-      justify-content: space-between;
+      font-size: 25px;
+      font-family: $oldfont;
+      background-color: #ededed ;
       display: flex;
       align-items: center;
-      border: 2px solid blue;
+      border-bottom: 1px ridge black;
       margin: auto;
-      height: 30px;
+      height: 35px;
+
+      .roomName{
+        align-items: start;
+
+        & > span{
+          font-weight: bold;
+        }
+      }
+
+      .enterRoom, .deleteRoom{
+        border-radius: 4px;
+        border: 1px ridge black;
+        letter-spacing: 1.5px;
+        font-family: $buttons;
+        color: white;
+        font-size: 18px;
+      }
 
       .enterRoom{
         margin-top: auto;
         margin-bottom: auto;
-        margin-left: 20px;
-        align-items: baseline;
-        background-color: white;
-        border: none;
+        margin-left: auto;
+        text-align: right;
+        background-color: #00A6FB;
         transition-duration: 0.4s;
       }
 
+      .enterRoom:hover{
+        background-color: #0076b2;
+        cursor: pointer;
+      }
+
       .deleteRoom{
-        justify-content: flex-end;
         margin-top: auto;
         margin-bottom: auto;
+        margin-left: 5px;
         align-items: baseline;
-        background-color: white;
-        border: none;
+        background-color: rgb(176, 0, 0);
         transition-duration: 0.4s;
       }
 
       .deleteRoom:hover{
-        border-radius: 5px;
-        background-color: red;
+        background-color: rgb(120, 0, 0);
         cursor: pointer;
       }
+    }
 
-      .enterRoom:hover{
-        border-radius: 5px;
-        background-color: cyan;
-        cursor: pointer;
-      }
+    li:last-child{
+      border-bottom: none;
     }
   }
 }
@@ -212,9 +291,6 @@ p{
   }
 }
 
-body {
-  background: linear-gradient(to top, #1B4079, #396B8A, #1B4079);
-}
 
 .detailsDiv{
 
@@ -243,20 +319,9 @@ body {
   }
 }
 
-// Stanze 
+// Chat 
 
-aside{
-  width: 20%;
-  height: 60%;
 
-  ul{
-    background-color: peru;
-
-    .mod{
-      color: chartreuse;
-    }
-  }
-}
 
 .bin{
   width: 20px;
@@ -271,46 +336,95 @@ aside{
 .chat {
   width: 100%;
   display: flex;
-  overflow-y: auto;
+  overflow: auto;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+
+  aside {
+    width: 20%;
+    height: 100%;
+
+    p {
+      color: white;
+      font-size: 25px;
+      font-family: $oldfont;
+    }
+
+    ul {
+      background-color: #ADC3D8;
+
+      li {
+        font-size: 22px;
+        font-family: $header;
+
+        &.mod {
+          color: crimson;
+        }
+      }
+    }
+  }
 
   .chatForm {
-    margin-top: auto;
-    width: 65%;
-    align-items: flex-end;
+    overflow: auto;
+    overflow-y: auto;
+    width: 70%;
     display: flex;
     flex-direction: column;
     height: 400px;
 
-    .chatBar {
-      width: 100%;
-      align-items: flex-end;
-      display: flex;
-      justify-content: center;
-      margin-bottom: 10px;
+    & > .chatContainer {
+      background-color: transparent;
+      // overflow: visible;
+
+      ul {
+        overflow: visible;
+        background-color: transparent;
+        width: 100%;
+        margin: 0;
+        overflow: auto;
+
+        li {
+          font-family: $font2;
+          background-color: transparent;
+          overflow-x: hidden;
+          margin: 0;
+          line-height: 30px;
+          font-size: 20px;
+          width: 100%;
+
+          &.left {
+            text-align: left;
+          }
+
+          &.right {
+            text-align: right;
+          }
+        }
+      }
     }
 
-    ul {
-      display: inline-block;
+    .chatBar {
+      position: relative;
+      margin-top: auto;
+      background-color: transparent;
       width: 100%;
-      margin: 0px;
-      overflow:auto;
-
-      .left, .right {
-        margin: 0px;
-        text-align: left;
-        line-height: 30px;
-        display: inline-block;
-        font-size: 20px;
-        width: 90%;
+      margin-bottom: 10px;
+      align-self: flex-end;
+      
+      
+      input{
+        font-size: large;
+        border-radius: 15px;
+        margin-right: 10px;
       }
 
-      .left {
-        text-align: left;
+      button{
+        font-size: large;
+        border-radius: 15px;
+
       }
 
-      .right {
-        text-align: right;
-      }
     }
   }
 }
@@ -330,22 +444,14 @@ h2{
 
 // Registrazione e login form
 
-form{
-  padding: 20px;
-  width: 25%;
+.registerForm{
+
   height: 300px;
-  border: 1px solid black;
-  border-radius: 15px;
-  background-color: #ededed;
-  margin: auto;
-  text-align: center;
-  align-items: center;
   margin-bottom: 10%;
 
-  ul{
+  & > ul{
     padding: 2%;
     width: 85%;
-    // margin-top: 15px;
     display: inline-block;
     list-style: none;
     align-items: center;
@@ -399,6 +505,7 @@ form{
     }
   }
 }
+
 
 // Footer
 

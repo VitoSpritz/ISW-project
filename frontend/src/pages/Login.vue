@@ -55,17 +55,17 @@ export default defineComponent({
   <div v-if="isActive">
     <Modal @close="showModal" :message='msgError'></Modal>
   </div>
-  <form @submit.prevent="onSubmit">
+  <form @submit.prevent="onSubmit" class="registerForm">
     <ul>
       <li><label for="email">Email</label></li>
       <li>
         <input type="email" id="email" name="email" v-model="email" :disabled="user?.username != undefined"
-          autocomplete="off" />
+          autocomplete="off" required/>
       </li>
       <li><label for="password">Password</label></li>
       <li>
         <input type="password" id="password" name="password" v-model="password" :disabled="user?.username != undefined"
-          autocomplete="off" />
+          autocomplete="off" required/>
       </li>
       <li>
         <input type="submit" name="submit" value="Invia" :disabled="user?.username != undefined" />
