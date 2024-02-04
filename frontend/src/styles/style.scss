@@ -1,5 +1,17 @@
 @import "./variables";
 
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 body, header, h1, h2, h5, ul {
   margin: 0;
   padding: 0;
@@ -17,8 +29,8 @@ body {
 }
 
 form{
-  padding: 20px;
-  width: 25%;
+  padding: 10px;
+  width: 45%;
   border: 1px solid black;
   border-radius: 15px;
   background-color: #ededed;
@@ -27,25 +39,13 @@ form{
 
 //Nav Bar
 
-@keyframes fade {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 .animazione-lettere {
   display: inline-block;
   animation: fade 2.5s infinite;
 }
 
 nav {
-  height: 40px;
+  height: 30px;
   padding: 5px;
   background-color: #ededed;
   border-radius: 0px 0px 25px 25px;
@@ -57,21 +57,23 @@ nav {
     list-style: none;
 
     .userLi{
+      font-size: 20px;
       width: fit-content;
       cursor: pointer;
       font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
     }
     
     .logoLi{
+      font-size: 20px;
+      width: 100px;
       font-family: Rockwell;
-      font-size: 30px;
       align-items: left;
       margin-right: auto;
       cursor: pointer;
     }
 
     li {
-      font-size: 25px;
+      font-size: 20px;
       text-align: center;
       width: 15%;
       margin-right: 2%;
@@ -100,24 +102,23 @@ nav {
 }
 
 p{
-  font-size: 20px;
+  font-size: 15px;
   font-family: $font2;
 }
 
 //Stanze
-
 
 .roomsDiv {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 60%;
+  width: 100%;
   margin: 40px auto;
 
   & > p{
     color: white;
-    font-size: 25px;
+    font-size: 22px;
 
     & > a{
       font-weight: bold;
@@ -135,7 +136,7 @@ p{
       border-radius: 15px;
       background-color: #ededed;
       width: 100%;
-      padding: 5px;
+      padding: 2px;
       height: auto;
       text-align: left;
 
@@ -167,7 +168,7 @@ p{
   }
 
   button {
-    font-size: 18px;
+    font-size: 14px;
     align-self: center;
     margin-top: 10px;
     margin-bottom: 20px;
@@ -176,7 +177,7 @@ p{
   .createRoom{
     border-radius: 15px;
     border: 2px ridge lightgray;
-    font-size: 20px;
+    font-size: 18px;
     align-items: baseline;
     justify-content: baseline;
     margin-bottom: 10px;
@@ -191,8 +192,8 @@ p{
 
   & > ul{
     list-style: none;
-    padding: 10px;
-    width: 60%;
+    padding: 5px;
+    width: 80%;
 
     .ban .enterRoom:hover{
       background-color: red;
@@ -201,7 +202,7 @@ p{
     li{
       padding: 5px;
       list-style: none;
-      font-size: 25px;
+      font-size: 20px;
       font-family: $oldfont;
       background-color: #ededed ;
       display: flex;
@@ -270,8 +271,8 @@ p{
 
 .logoContainer{
   display: flex;
-  width: 450px;
-  height: 300px;
+  width: 300px;
+  height: 150px;
 }
 
 .textContainer{
@@ -282,7 +283,7 @@ p{
     margin-left: auto;
     margin-right: 50px;
     text-align: justify;
-    font-size: 36px;
+    font-size: 26px;
     color: white;
 
     span{
@@ -290,7 +291,6 @@ p{
     }
   }
 }
-
 
 .detailsDiv{
 
@@ -321,8 +321,6 @@ p{
 
 // Chat 
 
-
-
 .bin{
   width: 20px;
   height: 20px;
@@ -351,17 +349,32 @@ p{
       font-family: $oldfont;
     }
 
-    ul {
+    ul{
       background-color: #ADC3D8;
+      border-top: 1px ridge grey;
+      border-bottom: 1px ridge grey;
 
       li {
         font-size: 22px;
         font-family: $header;
 
         &.mod {
-          color: crimson;
+          color: rgb(143, 12, 38);
         }
       }
+    }
+
+    ul:hover{
+      cursor: pointer;
+      background-color: #788693;
+    }
+
+    ul:first-child{
+      border-top: 0px;
+    }
+
+    ul:last-child{
+      border-top: 0px;
     }
   }
 
@@ -437,7 +450,7 @@ h2{
   font-family: $header;
   color: white;
   text-align: center;
-  font-size: 35px;
+  font-size: 30px;
   margin-top: 2%;
   margin-bottom: 3%;
 }
@@ -528,4 +541,106 @@ footer{
 
 @media screen and (min-width: 768px) {
   
+  form{
+    padding: 20px;
+    width: 25%;
+  }
+
+  nav{
+
+    height: 40px;
+    ul{
+
+      .userLi{
+        font-size: 25px;
+      }
+
+      .logoLi{
+        font-size: 30px;
+        width: auto;
+      }
+
+      li{
+        font-size: 25px;
+      }
+    }
+  }
+
+  p{
+    font-size: 20px;
+  }
+
+  .logoContainer{
+    width: 450px;
+    height: 300px;
+  }
+
+
+  .textContainer{
+
+    & > p{
+      font-size: 36px;
+    }
+  }
+
+  h2{
+    font-size: 35px;
+  }
+
+  .roomsDiv {
+    width: 70%;
+
+    & > p{
+      color: white;
+      font-size: 25px;
+
+    }
+
+    div{
+      & > form{
+        border-radius: 15px;
+        width: 100%;
+        padding: 5px;
+  
+        label{
+          font-size: 18px;
+          margin-bottom: 5px;
+        }
+  
+        input{
+          width: 80%;
+          height: auto;
+          font-size: large;
+        }
+      }
+    }
+
+    button {
+      font-size: 18px;
+    }
+
+    .createRoom{
+      font-size: 20px;
+    }
+
+    & > ul{
+      padding: 10px;
+      width: 65%;
+  
+      li{
+        padding: 5px;
+        font-size: 25px;
+        height: 35px;
+  
+        .enterRoom, .deleteRoom{
+          letter-spacing: 1.5px;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  footer{
+    font-size: 22px;
+  }
 }

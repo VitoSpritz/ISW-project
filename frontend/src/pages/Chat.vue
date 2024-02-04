@@ -34,7 +34,6 @@ export default defineComponent({
         },
 
         sendMessage(){
-            console.log("messaggio da inviare " + this.messageInput)
             if(this.messageInput != "" && this.messageInput != null && this.messageInput != " "){
                 this.socket.emit('sendMessage', { roomName: this.$route.params.idChat, message: this.messageInput, utente: this.user?.username});
                 this.messageInput = "";
@@ -84,6 +83,7 @@ export default defineComponent({
                     this.$router.push("/");
                 }
             }
+            
         },
 
         async getMods(){
@@ -120,7 +120,6 @@ export default defineComponent({
         },
 
         isOwnerParam(username: string | null){
-            console.log(this.email)
             for(const singleRoom of this.roomList){
                 if(singleRoom.roomCreator == this.email && singleRoom.id == this.idChat){
                     return true
@@ -136,23 +135,24 @@ export default defineComponent({
         getText(event: MouseEvent){
             const target = event.target as HTMLLIElement;
             this.text= target.textContent;
-            console.log(this.text)
             this.activateModal()
             this.getUserParams(this.text)
         },
 
         rimuoviMessaggio(messageId: number, msg: messageBody) {
-            console.log("Rimuovi messaggio chiamato", messageId);
             msg.showimg = false;
             this.socket.emit('rimuoviMessaggio', { roomName: this.$route.params.idChat, messageId });
         },
 
         rightClick(event: any, msg: messageBody){
             if(event.button == 2){
-                msg.showimg = true
+                msg.showimg = !msg.showimg
             }
         },
 
+        touchBin( msg: messageBody){
+            msg.showimg = !msg.showimg
+        }
     },
 
     mounted(){
@@ -187,18 +187,20 @@ export default defineComponent({
         <aside>
             <p>Utenti registrati</p>
             <ul>
-                    <li v-for="user in userList" @click="getText" :class="isMod(idChat, user) ? 'mod' : ''"> {{ user }}</li>
+                <li v-for="user in userList" @click="getText" :class="isMod(idChat, user) ? 'mod' : ''"> {{ user }}</li>
             </ul>
         </aside>
       
       <form class="chatForm" @submit.prevent="sendMessage">
         <div class="chatContainer">
             <ul>
-                <li v-for="(msg) in allMessages" :key="msg.userId" :class="isCurrentuser(msg) ? 'right' : 'left'" @contextmenu.prevent="rightClick($event, msg)"> 
-                    <img v-if="isCurrentuser(msg) && msg.showimg" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)" > 
+                <li v-for="(msg) in allMessages" :key="msg.userId" :class="isCurrentuser(msg) ? 'right' : 'left'" @contextmenu.prevent="rightClick($event, msg)" @touchstart="touchBin(msg)"> 
+                    <img v-if="isCurrentuser(msg) && msg.showimg && isMod(idChat, user?.username)" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)" 
+                    > 
                     {{ !isCurrentuser(msg) ? msg.utente + ': ' + msg.message : msg.message }}
-                    <img v-if="!isCurrentuser(msg) && msg.showimg" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)">
-                </li>  
+                    <img v-if="!isCurrentuser(msg) && msg.showimg && isMod(idChat, user?.username)" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)"
+                    >
+                </li>
             </ul>
         </div>
         <div class="chatBar" style="box-sizing: border-box;">
@@ -208,7 +210,7 @@ export default defineComponent({
       </form>
     </div>
     <div v-if="isActive && isMod(idChat, user?.username) && text != user?.username && (!isOwnerParam(text) && isMod(idChat, user?.username))">
-        <ModsModal :isOwner = isOwner() :isMod="isMod(idChat, text)" :email="email" @close="activateModal()" :id="idChat"></ModsModal>
+        <ModsModal :isOwner = isOwner() :isMod="isMod(idChat, text)" :email="email" :username="text" @close="activateModal()" @updateBan="getBannedUsers()" :id="idChat"></ModsModal>
     </div>
     
 </template>

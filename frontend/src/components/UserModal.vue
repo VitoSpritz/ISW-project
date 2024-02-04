@@ -48,7 +48,8 @@ export default defineComponent({
         width: fit-content;
         cursor: pointer;
         color: red;
-        font-size: 15px;
+        font-size: 20px;
+        
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
 </style>

@@ -9,7 +9,7 @@ export default defineComponent({
             fine_sospensione: null as string | null
         }
     },
-    props: ['isOwner', 'email', 'id', 'isMod'],
+    props: ['isOwner', 'email', 'id', 'isMod', 'username'],
     methods:{
         closeModal(){
             this.$emit('close');
@@ -17,12 +17,13 @@ export default defineComponent({
 
         async banUser(){
             try{
-                console.log("Franga " + this.fine_sospensione)
                 await axios.post("/api/roles/banUser", {
                     email: this.email,
                     id: this.id,
                     fine_sospensione: this.fine_sospensione
                 })
+                this.$emit('updateBan')
+
             }catch(e: any){
                 console.log(e)
             }
@@ -30,7 +31,6 @@ export default defineComponent({
 
         async createMod(){
             try{
-                console.log(this.email + " " + this.id)
                 await axios.post(`/api/roles/createMod/${this.id}/${this.email}`)
             }catch(e: any){
                 console.log(e)
@@ -40,7 +40,6 @@ export default defineComponent({
 
         async deleteMod(){
             try{
-                console.log("Welo belo " + this.id + " " +this.email)
                 await axios.post(`/api/roles/deleteMod/${this.id}/${this.email}`)
             }catch(e: any){
                 console.log(e)
@@ -55,14 +54,15 @@ export default defineComponent({
         <div class="modal">
             <template v-if="isOwner">
                 <div class="banSection">
-                    <p>Lo stiamolo banniamolo sto coglione di {{ email }} in chat {{ id }} ?</p>
+                    <p>Vuoi bannare l'utente {{ username }} nella chat {{ id }} ?</p>
                     <input type="datetime-local" id="BanDate" name="BanDate" v-model="fine_sospensione">
                     <input type="button" value="Invia" @click="banUser">
                 </div>
                 <div v-if="isOwner" class="modSection">
-                    <p>Ha fatto il bravo sto negro di {{ email }} ? </p>
-                    <input type="button" value="Si" id="modButton" name="modButton" @click="createMod()">
-                    <input type="button" value="No" id="unmodButton" name="unmodButton" @click="deleteMod()" v-if="isMod">
+                    <p v-if="!isMod">Vuoi promuovere a moderatore l'utente {{ username }} ? </p>
+                    <p v-else>Vuoi rimuovere il moderatore all'utente {{ username }}</p>
+                    <input type="button" value="Si" id="modButton" name="modButton" @click="createMod()" v-if="!isMod">
+                    <input type="button" value="Si" id="unmodButton" name="unmodButton" @click="deleteMod()" v-if="isMod">
                 </div>
             </template>
             <template v-else>
@@ -95,7 +95,11 @@ export default defineComponent({
     }
 
     p{
-        font-size: 15px;
+        font-size: 19px;
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+
+    input:hover{
+        cursor: pointer;
     }
 </style>

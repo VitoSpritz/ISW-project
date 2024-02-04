@@ -63,7 +63,6 @@ export default defineComponent({
         async getBannedUsers(){
             const res = await axios.get("/api/roles/banned");
             this.banList = res.data;
-            console.log(this.banList)
         },
 
         async getUser(){
@@ -75,7 +74,6 @@ export default defineComponent({
             for(const ban of this.banList){
                 if(ban.id.toString() == roomId && ban.email == this.user?.email){
                     const today = new Date();
-                    console.log(ban.fine_sospensione > today.toISOString())
                     if(ban.fine_sospensione > today.toISOString()){
                         const time = this.formatDateTime(ban.fine_sospensione)
                         this.msgError = "Sei stato bannato fino al: " + time;

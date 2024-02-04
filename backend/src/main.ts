@@ -45,7 +45,7 @@ io.on('connection', (socket: Socket) => {
       if(!userList.has(roomName)){
         userList.set(roomName, new Set());
       }
-      console.log("Utente entrato: " + user);
+      
       userList.get(roomName)?.add(user);
       io.to(roomName).emit('userList', Array.from(userList.get(roomName) || []));
 
@@ -84,7 +84,6 @@ io.on('connection', (socket: Socket) => {
     });
 
     socket.on('messaggioRimosso', (data) => {
-      console.log("Messaggio rimosso dal backend", data);
       const { roomName, messageId } = data;
     
       const roomMessages = userMessages.get(roomName);
@@ -96,7 +95,6 @@ io.on('connection', (socket: Socket) => {
     });
 
     socket.on('disconnect', () => {
-      console.log('User disconnected');
       const rooms = io.sockets.adapter.rooms;
       for (const roomName of Object.keys(rooms)) {
         if (userList.has(roomName) && userList.get(roomName)?.has(socket.id)) {
