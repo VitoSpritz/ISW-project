@@ -32,6 +32,7 @@ export default defineComponent({
                 this.roomOwners.push(res.data)
                 this.RegisterRoom()
                 this.toggleDiv()
+                this.roomName = ""
             } catch (e: any) {
                 if (e.response) {
                     console.error("Erore : ", e);
@@ -176,5 +177,4 @@ export default defineComponent({
     transform: translateX(20px);
     opacity: 0;
     }
-
 </style>

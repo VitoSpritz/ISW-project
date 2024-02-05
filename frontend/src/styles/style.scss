@@ -362,12 +362,13 @@ p{
           color: rgb(143, 12, 38);
         }
       }
+
+      li:hover{
+        cursor: pointer;
+        background-color: #788693;
+      }
     }
 
-    ul:hover{
-      cursor: pointer;
-      background-color: #788693;
-    }
 
     ul:first-child{
       border-top: 0px;

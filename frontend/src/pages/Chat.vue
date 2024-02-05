@@ -152,6 +152,14 @@ export default defineComponent({
 
         touchBin( msg: messageBody){
             msg.showimg = !msg.showimg
+        },
+
+        getName(){
+            for(const room of this.roomList){
+                if(this.idChat == room.id){
+                    return room.roomName
+                }
+            }
         }
     },
 
@@ -181,7 +189,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <h2>Chat numero {{ idChat }}</h2>
+    <h2>Chat {{ getName() }}</h2>
     
     <div class="chat">
         <aside>
@@ -191,23 +199,23 @@ export default defineComponent({
             </ul>
         </aside>
       
-      <form class="chatForm" @submit.prevent="sendMessage">
-        <div class="chatContainer">
-            <ul>
-                <li v-for="(msg) in allMessages" :key="msg.userId" :class="isCurrentuser(msg) ? 'right' : 'left'" @contextmenu.prevent="rightClick($event, msg)" @touchstart="touchBin(msg)"> 
-                    <img v-if="isCurrentuser(msg) && msg.showimg && isMod(idChat, user?.username)" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)" 
-                    > 
-                    {{ !isCurrentuser(msg) ? msg.utente + ': ' + msg.message : msg.message }}
-                    <img v-if="!isCurrentuser(msg) && msg.showimg && isMod(idChat, user?.username)" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)"
-                    >
-                </li>
-            </ul>
-        </div>
-        <div class="chatBar" style="box-sizing: border-box;">
-            <input id="m" type="text" autocomplete="off" placeholder="Scrivi un messaggio" v-model="messageInput"/>
-            <button>Send</button>
-        </div>
-      </form>
+        <form class="chatForm" @submit.prevent="sendMessage">
+            <div class="chatContainer">
+                <ul>
+                    <li v-for="(msg) in allMessages" :key="msg.userId" :class="isCurrentuser(msg) ? 'right' : 'left'" @contextmenu.prevent="rightClick($event, msg)" @touchstart="touchBin(msg)"> 
+                        <img v-if="isCurrentuser(msg) && msg.showimg && isMod(idChat, user?.username)" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)" 
+                        > 
+                        {{ !isCurrentuser(msg) ? msg.utente + ': ' + msg.message : msg.message }}
+                        <img v-if="!isCurrentuser(msg) && msg.showimg && isMod(idChat, user?.username)" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)"
+                        >
+                    </li>
+                </ul>
+            </div>
+            <div class="chatBar" style="box-sizing: border-box;">
+                <input id="m" type="text" autocomplete="off" placeholder="Scrivi un messaggio" v-model="messageInput"/>
+                <button>Send</button>
+            </div>
+        </form>
     </div>
     <div v-if="isActive && isMod(idChat, user?.username) && text != user?.username && (!isOwnerParam(text) && isMod(idChat, user?.username))">
         <ModsModal :isOwner = isOwner() :isMod="isMod(idChat, text)" :email="email" :username="text" @close="activateModal()" @updateBan="getBannedUsers()" :id="idChat"></ModsModal>
