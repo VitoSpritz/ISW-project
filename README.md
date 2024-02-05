@@ -20,7 +20,8 @@ Per il frontend abbiamo utilizzato il framework **Vue.js e Vite** in aggiunta a 
 ### Backend
 
 Per il backend invece, abbiamo utilizzato **TypeScript** come linguaggio di scripting, **Express** come framework backend per la gestione delle connessione HTTP e per il routing. **Node.js** è stato utilizzato come motore lato server e **socket.io** per la gestione degli eventi delle chat, quali connessione degli utenti, creazione camere e gestione dei messaggi inviati.
-I dati ricevuti lato server vengono poi salvati su un databse **MySQL**, con il quale si effettuano periodicamente chiamate per il corretto funzionamento dell'applicaizone.
+Abbiamo utilizzato anche la libreria **bcrypt** per criptare le password, così da non salvarle in chiaro nel database.
+Abbiamo anche gestito chiamate a database tramite la libreria **MySql2**, che ci ha permesso di salvare dati su un databse relazionale **MySQL**, con il quale si effettuano periodicamente chiamate per il corretto funzionamento dell'applicaizone.
 
 ### Criticità
 
