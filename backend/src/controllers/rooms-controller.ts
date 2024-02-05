@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { getConnection } from "../utils/db"
 import { decodeAccessToken } from "../utils/auth"
+import { roomOwner } from "../utils/types" 
 
 export const createRoom = async (req: Request, res: Response) => {
   // Verifica che l'utente abbia effettuato il login
@@ -16,16 +17,23 @@ export const createRoom = async (req: Request, res: Response) => {
     req.body.roomname,
     user.email
   ])
+
   const [name] = await conn.execute("SELECT id FROM rooms WHERE roomName = ? and roomCreator = ?", [
     req.body.roomname,
     user.email
   ])
+
   const id = (name as any)[0]
   await conn.execute("INSERT INTO moderators (email, id) VALUE (?, ?)", [
     user.email,
     id.id
   ])
-  res.json({ success: true })
+  const obj: roomOwner ={
+    id: id.id,
+    roomName: req.body.roomname,
+    roomCreator: user.email
+  } 
+  res.json(obj)
 }
 
 export const getRoomList = async (req: Request, res: Response) => {
@@ -61,6 +69,10 @@ export const deleteRoom = async (req: Request, res: Response) => {
   }
 
   const conn = await getConnection()
+  
+  await conn.execute("DELETE FROM bannedusers WHERE id = ?", [
+    req.params.id
+  ])
 
   await conn.execute("DELETE FROM moderators WHERE id = ?",[
     req.params.id

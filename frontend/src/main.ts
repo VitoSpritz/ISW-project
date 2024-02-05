@@ -7,7 +7,6 @@ import RegisterVue from "./pages/Register.vue";
 import StanzeVue from "./pages/Stanze.vue"
 import NotFoundVue from "./pages/NotFound.vue";
 import ChatVue from "./pages/Chat.vue";
-import { io } from "socket.io-client";
 
 const router: Router = createRouter({
     history: createWebHistory(),

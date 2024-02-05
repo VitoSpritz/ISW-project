@@ -26,9 +26,10 @@ export default defineComponent({
     methods:{
         async createRoom(){
             try {
-                await axios.post("/api/room/createRoom", {
+                const res = await axios.post("/api/room/createRoom", {
                 roomname: this.roomName
                 })
+                this.roomOwners.push(res.data)
                 this.RegisterRoom()
                 this.toggleDiv()
             } catch (e: any) {
@@ -102,8 +103,13 @@ export default defineComponent({
         },
 
         async deleteRoom(id: string){
-            await axios.post(`/api/rooms/deleteRoom/${id}`)
-            this.$router.push('/stanze');
+            try{
+                await axios.post(`/api/rooms/deleteRoom/${id}`);
+                this.roomOwners = this.roomOwners.filter(room => room.id !== id)
+                this.$router.push('/stanze');
+            }catch(e: any){
+                console.log("Errore " + e);
+            }
         }
     },
     mounted(){
@@ -123,9 +129,7 @@ export default defineComponent({
     <div class="roomsDiv">
         <p v-if="user?.username != undefined">Iniza creando una nuova stanza, oppure unisciti a una già esistente</p>
         <p v-else>Non hai effettuato l'acceso, fallo <router-link to="/register">qui</router-link> per poter iniziare a chattare! </p>
-        <button v-show="user?.username != undefined" class="createRoom" @click="toggleDiv()">
-            
-            Crea una stanza</button>
+        <button type="submit" v-show="user?.username != undefined" class="createRoom" @click="toggleDiv()">Crea una stanza</button>
         <template v-if="toggle">
             <Transition name="slide-fade" appear>
                 <div v-if="user?.username != undefined" class="createRoomDiv">
@@ -142,7 +146,6 @@ export default defineComponent({
                 <span class="roomName">Stanza <span>{{ room.roomName }}</span></span>
                 <button class="enterRoom" @click=" !checkBans(room.id) ? changePage(room.id) : showModal()" >Entra</button>
                 <button v-if="user?.email == room.roomCreator" class="deleteRoom" @click="deleteRoom(room.id)">Elimina</button>
-                
             </li>
         </ul>
     </div>
