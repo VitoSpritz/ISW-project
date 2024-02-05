@@ -1,6 +1,6 @@
 # ISW-project
 Project for ISW exam
-
+![Logo](./frontend/src/public/logo_good2.svg)
 Made by Vito Paolo Potenza & Giorgio Zappoli
 
 # Relazione di progetto
