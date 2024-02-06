@@ -32,7 +32,7 @@ export default defineComponent({
         if (e.response) {
           this.isActive = true;
           this.password = "";
-          this.msgError = e.response.status + " " + e.response.statusText + " - " + e.response.data;
+          this.msgError = e.response.statusText + " - " + e.response.data;
         } else {
           this.msgError = e.message
         }

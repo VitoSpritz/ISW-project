@@ -80,7 +80,7 @@ export default defineComponent({
           if (e.response) {
             this.password = "";
             this.isActive = true;
-            this.msgError = e.response.status + " " + e.response.statusText + " - " + e.response.data;
+            this.msgError = e.response.statusText + " - " + e.response.data;
           } else {
             this.msgError = e.message
           }

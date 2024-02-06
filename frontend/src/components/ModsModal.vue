@@ -56,20 +56,20 @@ export default defineComponent({
                 <div class="banSection">
                     <p>Vuoi bannare l'utente {{ username }} nella chat {{ id }} ?</p>
                     <input type="datetime-local" id="BanDate" name="BanDate" v-model="fine_sospensione">
-                    <input type="button" value="Invia" @click="banUser">
+                    <input type="button" value="Invia" @click="banUser(), closeModal()">
                 </div>
                 <div v-if="isOwner" class="modSection">
                     <p v-if="!isMod">Vuoi promuovere a moderatore l'utente {{ username }} ? </p>
                     <p v-else>Vuoi rimuovere il moderatore all'utente {{ username }}</p>
-                    <input type="button" value="Si" id="modButton" name="modButton" @click="createMod()" v-if="!isMod">
-                    <input type="button" value="Si" id="unmodButton" name="unmodButton" @click="deleteMod()" v-if="isMod">
+                    <input type="button" value="Si" id="modButton" name="modButton" @click="createMod(), closeModal()" v-if="!isMod">
+                    <input type="button" value="Si" id="unmodButton" name="unmodButton" @click="deleteMod(), closeModal()" v-if="isMod">
                 </div>
             </template>
             <template v-else>
                 <div class="banSection">
-                    <p>Lo stiamolo banniamolo sto coglione di {{ email }} in chat {{ id }}?</p>
+                    <p>Vuoi bannare l'utente {{ username }} nella chat {{ id }}?</p>
                     <input type="datetime-local" id="BanDate" name="BanDate" v-model="fine_sospensione">
-                    <input type="button" value="Invia" @click="banUser">
+                    <input type="button" value="Invia" @click="banUser(), closeModal() ">
                 </div>
             </template>
         </div>

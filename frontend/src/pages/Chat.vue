@@ -25,7 +25,8 @@ export default defineComponent({
             banList: [] as bannedUser[],
             isActive: false,
             mods: [] as Moderator[],
-            showBin: false
+            showBin: false,
+            joinId: 0
         }
     },
     methods:{
@@ -49,17 +50,31 @@ export default defineComponent({
         getUserList(){
             this.socket.on('userList',(users: string[]) => {
             this.userList = users;
+            
         })},
 
         isCurrentuser(msg: messageBody){
             return this.user?.username == msg.utente
         },
 
+        sendHead(){
+            const joinUser : messageBody = {
+                userId: "0",
+                message: this.user?.username + " è entrato",
+                utente: "chat",
+                showimg: false,
+                messageId: this.joinId
+            }
+            this.socket.emit("sendMessage", { roomName: this.$route.params.idChat, message: joinUser.message, utente: "chat"});
+            console.log("Push")
+        },
+
         async getUser(){
             const res = await axios.get("/api/auth/profile")
             this.user = res.data
             if(this.user?.username != undefined){
-                this.joinRoom()
+                this.joinRoom();
+                this.sendHead()
             }else{
                 this.$router.push('/');
             }
@@ -83,7 +98,6 @@ export default defineComponent({
                     this.$router.push("/");
                 }
             }
-            
         },
 
         async getMods(){
@@ -168,8 +182,7 @@ export default defineComponent({
         this.getMods(),
         this.receiveMessage(),
         this.getUserList(),
-        this.getOwner(),
-        this.getUser()
+        this.getOwner()
 
         this.socket.on('messaggioRimosso', (data) => {
             this.allMessages = this.allMessages.filter(msg => msg.userId !== data.messageId);
@@ -178,7 +191,6 @@ export default defineComponent({
         this.socket.on('messaggiAggiornati', (updatedMessages) => {
             this.allMessages = updatedMessages;
         });
-        
         
     },
     created(){
@@ -202,11 +214,11 @@ export default defineComponent({
         <form class="chatForm" @submit.prevent="sendMessage">
             <div class="chatContainer">
                 <ul>
-                    <li v-for="(msg) in allMessages" :key="msg.userId" :class="isCurrentuser(msg) ? 'right' : 'left'" @contextmenu.prevent="rightClick($event, msg)" @touchstart="touchBin(msg)"> 
-                        <img v-if="isCurrentuser(msg) && msg.showimg && isMod(idChat, user?.username)" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)" 
+                    <li v-for="(msg) in allMessages" :key="msg.userId" :class="msg.utente == 'chat' ? 'center' : (isCurrentuser(msg) ? 'right' : 'left')" @contextmenu.prevent="rightClick($event, msg)" @touchstart="touchBin(msg)">
+                        <img v-if="isCurrentuser(msg) && msg.showimg && isMod(idChat, user?.username) && msg.utente != 'chat' " src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)" 
                         > 
-                        {{ !isCurrentuser(msg) ? msg.utente + ': ' + msg.message : msg.message }}
-                        <img v-if="!isCurrentuser(msg) && msg.showimg && isMod(idChat, user?.username)" src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)"
+                        {{ msg.utente == 'chat' ? msg.message : (!isCurrentuser(msg) ? msg.utente + ': ' + msg.message : msg.message) }}
+                        <img v-if="!isCurrentuser(msg) && msg.showimg && isMod(idChat, user?.username) && msg.utente != 'chat' " src="../public/bin.png" class="bin" @click="rimuoviMessaggio(msg.messageId, msg)"
                         >
                     </li>
                 </ul>

@@ -56,7 +56,6 @@ export const banUser = async (req: Request, res: Response) =>{
 
     const conn = await getConnection()
     const { email, id, fine_sospensione } = req.body;
-    console.log(email + " " + fine_sospensione + " " +id)
 
     await conn.execute("INSERT INTO bannedusers (email, id, fine_sospensione) VALUE (?, ?, ?)", [
         email,
