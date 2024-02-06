@@ -460,7 +460,7 @@ h2{
 
 .registerForm{
 
-  height: 300px;
+  height: 350px;
   margin-bottom: 10%;
 
   & > ul{
@@ -482,7 +482,7 @@ h2{
       label{
         text-align: left;
         font-family: $font2;
-        font-size: 25px;
+        font-size: 20px;
         margin-bottom: 5px;
       }
 
@@ -503,6 +503,12 @@ h2{
         cursor: pointer;
         background-color: #d2d2d2;
       }
+
+      input[type=checkbox]{
+        width: auto;
+        align-items: left;
+        text-align: left;
+      }
     }
 
     li:last-child{
@@ -513,6 +519,8 @@ h2{
   }
 
   & > p{
+
+    font-size: 18px;
 
     a{
       font-weight: bold;
@@ -566,6 +574,13 @@ footer{
       li{
         font-size: 25px;
       }
+    }
+  }
+
+  .registerForm{
+
+    & > p{
+      font-size: 22px;
     }
   }
 

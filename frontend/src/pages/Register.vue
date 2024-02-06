@@ -13,7 +13,8 @@ export default defineComponent({
       email: "",
       isActive: false,
       msgError: "",
-      pass: false
+      pass: false,
+      showpass: false
     }
   },
   components: {
@@ -119,8 +120,11 @@ export default defineComponent({
       </li>
       <li><label for="password">Password</label></li>
       <li>
-        <input type="password" id="password" name="password" v-model="password"
+        <input :type="showpass==false ? 'password' : 'text'" id="password" name="password" v-model="password"
           :disabled="user?.username != undefined ? true : false" required autocomplete="off" />
+      </li>
+      <li>
+        <input type="checkbox" id="showPass" name="showPass" @click="showpass = !showpass"><label for="showPass">Mostra password</label>
       </li>
       <li>
         <input type="submit" name="submit" value="Invia" :disabled="user?.username != undefined ? true : false" />
@@ -132,4 +136,5 @@ export default defineComponent({
 <style scoped>
 form {
   height: auto;
-}</style>
+}
+</style>
