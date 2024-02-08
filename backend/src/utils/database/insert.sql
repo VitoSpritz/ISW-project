@@ -1,3 +1,5 @@
+USE projisw;
+
 INSERT INTO `users` (`username`, `email`, `hashPassword`) VALUES
 ('Giorgio', 'giorgio.zap@gmail.com', '$2b$10$/my/aCB0L8n/ac2.iAKJW.80wtMa1nHuhS2y2HnGSwLUXJapOtgQW'),
 ('Luca', 'luca.ros@gmail.com', '$2b$10$UUD2Eyw5mHFNPzfJVz6d7O28YtWy/e5s91J95hof/149GBatCngsy'),

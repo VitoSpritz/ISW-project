@@ -66,7 +66,6 @@ export default defineComponent({
                 messageId: this.joinId
             }
             this.socket.emit("sendMessage", { roomName: this.$route.params.idChat, message: joinUser.message, utente: "chat"});
-            console.log("Push")
         },
 
         async getUser(){
