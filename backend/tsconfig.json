@@ -7,7 +7,10 @@
     "strict": true,
     "skipLibCheck": true,
     "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./dist"
   },
-  "include": ["src/utils/types.ts"],
+  "include": [
+    "src/utils/types.ts",
+    "src/main.ts"
+  ]
 }
