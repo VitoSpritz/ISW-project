@@ -16,22 +16,26 @@ export default defineComponent({
         },
 
         async banUser(){
-            try{
-                await axios.post("/api/roles/banUser", {
-                    email: this.email,
-                    id: this.id,
-                    fine_sospensione: this.fine_sospensione
-                })
-                this.$emit('updateBan')
+            if(this.fine_sospensione != null){
+                try{
+                    await axios.post("/api/roles/banUser", {
+                        email: this.email,
+                        id: this.id,
+                        fine_sospensione: this.fine_sospensione
+                    })
+                    this.$emit('updateBan')
+                    this.closeModal()
 
-            }catch(e: any){
-                console.log(e)
+                }catch(e: any){
+                    console.log(e)
+                }
             }
         },
 
         async createMod(){
             try{
                 await axios.post(`/api/roles/createMod/${this.id}/${this.email}`)
+                this.closeModal();
             }catch(e: any){
                 console.log(e)
             }
@@ -41,6 +45,7 @@ export default defineComponent({
         async deleteMod(){
             try{
                 await axios.post(`/api/roles/deleteMod/${this.id}/${this.email}`)
+                this.closeModal();
             }catch(e: any){
                 console.log(e)
             }
@@ -55,21 +60,21 @@ export default defineComponent({
             <template v-if="isOwner">
                 <div class="banSection">
                     <p>Vuoi bannare l'utente {{ username }} nella chat {{ id }} ?</p>
-                    <input type="datetime-local" id="BanDate" name="BanDate" v-model="fine_sospensione">
-                    <input type="button" value="Invia" @click="banUser(), closeModal()">
+                    <input type="datetime-local" id="BanDate" name="BanDate" v-model="fine_sospensione" required>
+                    <input type="button" value="Invia" @click="banUser()">
                 </div>
                 <div v-if="isOwner" class="modSection">
                     <p v-if="!isMod">Vuoi promuovere a moderatore l'utente {{ username }} ? </p>
                     <p v-else>Vuoi rimuovere il moderatore all'utente {{ username }}</p>
-                    <input type="button" value="Si" id="modButton" name="modButton" @click="createMod(), closeModal()" v-if="!isMod">
-                    <input type="button" value="Si" id="unmodButton" name="unmodButton" @click="deleteMod(), closeModal()" v-if="isMod">
+                    <input type="button" value="Si" id="modButton" name="modButton" @click="createMod()" v-if="!isMod">
+                    <input type="button" value="Si" id="unmodButton" name="unmodButton" @click="deleteMod()" v-if="isMod">
                 </div>
             </template>
             <template v-else>
                 <div class="banSection">
                     <p>Vuoi bannare l'utente {{ username }} nella chat {{ id }}?</p>
-                    <input type="datetime-local" id="BanDate" name="BanDate" v-model="fine_sospensione">
-                    <input type="button" value="Invia" @click="banUser(), closeModal() ">
+                    <input type="datetime-local" id="BanDate" name="BanDate" v-model="fine_sospensione" required>
+                    <input type="button" value="Invia" @click="banUser()">
                 </div>
             </template>
         </div>

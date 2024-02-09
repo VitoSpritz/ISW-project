@@ -50,8 +50,10 @@ export default defineComponent({
         getUserList(){
             this.socket.on('userList',(users: string[]) => {
             this.userList = users;
-            
-        })},
+            console.log(users)
+        })
+        
+        },
 
         isCurrentuser(msg: messageBody){
             return this.user?.username == msg.utente
@@ -142,14 +144,15 @@ export default defineComponent({
         },
 
         activateModal(){
-            this.isActive = !this.isActive
+            this.isActive = !this.isActive;
+            this.getMods();
         },
 
         getText(event: MouseEvent){
             const target = event.target as HTMLLIElement;
             this.text= target.textContent;
-            this.activateModal()
-            this.getUserParams(this.text)
+            this.activateModal();
+            this.getUserParams(this.text);
         },
 
         rimuoviMessaggio(messageId: number, msg: messageBody) {
@@ -200,7 +203,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <h2>Chat {{ getName() }}</h2>
+    <h2> {{ getName() }}</h2>
     
     <div class="chat">
         <aside>
