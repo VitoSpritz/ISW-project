@@ -30,3 +30,14 @@ Nella fase di sviluppo lato server, ci sono state diverse criticità nella gesti
 ### Conclusione
 
 Lo sviluppo dell'applicazione è stato fatto in modo *responsive*, seguendo il modello *mobile-first* e adottando i criteri di accessibilità dettati nello scorso corso di **Fondamenti di sistemi Web**.
+
+### Informazioni utili per il testing
+
+L'applicazione è perfettamente funzionante anche tramite build nella directory backend grazie alle cartelle **dist**, per avvaire è sufficiente utilizzare il comando *npm start*
+
+Qui di seguito ci sono le credenziali di alcuni account di prova, in caso si volesse provare anche senza registrarne uno nuovo
+
+| **Email** | **Password** |
+| - | - |
+| giorgio.zap@gmail.com | giorgio123 |
+| luca.ros@gmail.com | lucarossi123 |
